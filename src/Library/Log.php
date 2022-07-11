@@ -1,8 +1,21 @@
 <?php
 
+/**
+ *  
+ */
+
 class Log
 {
-    public function __construct()
+
+    /**
+     *  Project base directory
+     */
+    public static $baseDir = __DIR__;
+
+    /**
+     *  Write requests to log file
+     */
+    public static function writeToLog($dateTime, Request $request)
     {
         
     }
