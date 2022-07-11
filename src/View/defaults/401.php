@@ -1,1 +1,2 @@
 
+<?php require './footer.php'; ?>
