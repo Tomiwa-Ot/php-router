@@ -15,7 +15,7 @@ class Log
     /**
      *  Write requests to log file
      */
-    public static function writeToLog($dateTime, Request $request)
+    public static function writeToLog($dateTime)
     {
         
     }
