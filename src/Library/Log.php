@@ -1,22 +1,20 @@
 <?php
 
 /**
- *  
+ *  Logs Manager
  */
 
 class Log
 {
 
     /**
-     *  Project base directory
-     */
-    public static $baseDir = __DIR__;
-
-    /**
      *  Write requests to log file
      */
-    public static function writeToLog($dateTime)
+    public static function writeToLog($dateTime, $request)
     {
-        
+        $data = '[' . $dateTime . ']' . $request;
+        $fp = fopen(__DIR__ . '/../Logs/server.log', 'a');
+        fwrite($fp, $data);
+        fclose($fp);
     }
 }
