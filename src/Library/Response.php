@@ -1,8 +1,15 @@
 <?php
 
+/**
+ *  HTTP Response Class
+ */
+
 final class Response
 {
 
+    /**
+     *  Returns json output
+     */
     public function json($data, $statusCode)
     {
         header('Content-Type: application/json; charset=utf-8');
@@ -10,6 +17,9 @@ final class Response
         http_response_code($statusCode);
     }
 
+    /**
+     *  Returns xml output
+     */
     public function xml($data = array(), $statusCode)
     {
         header('Content-Type: application/xml');
@@ -20,6 +30,9 @@ final class Response
         http_response_code($statusCode);
     }
 
+    /**
+     *  Render html view
+     */
     public function render($view, $data = array())
     {
         if(count($data)) extract($data);
