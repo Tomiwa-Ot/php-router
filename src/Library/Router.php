@@ -1,13 +1,23 @@
 <?php
 
+/**
+ *  Dynamic Routing Manager
+ */
+
 require __DIR__ . '/../Library/Response.php';
 require __DIR__ . '/Config.php';
 
 class Router
 {
-
+    
+    /**
+     *  Acceptable URI datatypes
+     */
     private $dataTypes = array('int', 'double', 'string');
 
+    /**
+     *  Valid URI(s)
+     */
     private static $uriList = array(
         'GET' => array(),
         'POST' => array(),
@@ -15,6 +25,9 @@ class Router
         'DELETE' => array()
     );
 
+    /**
+     *  Regex representation of URI(s)
+     */
     private static $uriListRegExp = array(
         'GET' => array(),
         'POST' => array(),
@@ -22,6 +35,9 @@ class Router
         'DELETE' => array()
     );
 
+    /**
+     *  Callbacks for URI(s)
+     */
     private static $uriCallback = array(
         'GET' => array(),
         'POST' => array(),
@@ -29,6 +45,9 @@ class Router
         'DELETE' => array()
     );
 
+    /**
+     *  Register URI(s) and callbacks
+     */
     public static function __callStatic($name, $arguments)
     {
         if(array_key_exists(strtoupper($name), self::$uriList))
@@ -68,15 +87,22 @@ class Router
         }
     }
 
+    /**
+     *  Parse requested route
+     */
     public static function submit()
     {
         if(in_array($_SERVER['REQUEST_METHOD'], Config::getEnvProperties('http_method')))
         {
             $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
             $uriMatches = false;
-            foreach(self::$uriList as $u)
+            foreach(self::$uriListRegExp[$_SERVER['REQUEST_METHOD']] as $regex)
             {
-                // generate regex and search for match
+                if(preg_match($regex, $uri))
+                {
+                    $uriMatches = true;
+                    break;
+                }
             }
             if($uriMatches)
             {
