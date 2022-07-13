@@ -20,8 +20,7 @@ class Config
     {
         $envProperties = array();
         $vars = file(Config::$baseDir . '/../.env', FILE_IGNORE_NEW_LINES);
-        foreach($vars as $var)
-        {
+        foreach ($vars as $var) {
             if(substr($var, 0, 2) === '##') continue;
             $envProperties[explode('=', $var)[0]] = explode('=', $var)[1];
         }
@@ -39,12 +38,9 @@ class Config
     public static function getEnvProperties($property = '')
     {
         $envProperties = Config::parseEnvProperties();
-        if(empty($property))
-        {
+        if (empty($property)) {
             return $envProperties;
-        } 
-        else 
-        {
+        } else {
             return $envProperties[$property];
         }
     }

@@ -28,8 +28,7 @@ class Router
     public function __construct()
     {
         $uriList = explode(',', trim(Config::getEnvProperties('http_method')));
-        foreach($uriList as $uri)
-        {
+        foreach ($uriList as $uri) {
             self::$uriList[strtoupper($uri)] = array();
             self::$uriListRegExp[strtoupper($uri)] = array();
             self::$uriCallback[strtoupper($uri)] = array();
@@ -44,21 +43,14 @@ class Router
      */
     public function __call($name, $arguments)
     {
-        if(array_key_exists(strtoupper($name), self::$uriList))
-        {
+        if (array_key_exists(strtoupper($name), self::$uriList)) {
             $uriRegExp = '/';
-            foreach(explode('/', $arguments[0]) as $key => $path)
-            {
-                if(self::stringStartsWith(trim($path), '<') && self::stringEndsWith(trim($path), '>'))
-                {
-                    if(!in_array(explode(':', substr(trim($path), 1, strlen(trim($path)) - 1))[0], self::$dataTypes, true))
-                    {
+            foreach (explode('/', $arguments[0]) as $key => $path) {
+                if (self::stringStartsWith(trim($path), '<') && self::stringEndsWith(trim($path), '>')) {
+                    if (!in_array(explode(':', substr(trim($path), 1, strlen(trim($path)) - 1))[0], self::$dataTypes, true)) {
                         return;
-                    }
-                    else
-                    {
-                        switch(gettype(trim(explode(':', trim($path))[1])))
-                        {
+                    } else {
+                        switch (gettype(trim(explode(':', trim($path))[1]))) {
                             case 'integer':
                                 $uriRegExp .= '\d+';
                                 break;
@@ -68,15 +60,10 @@ class Router
                                 $uriRegExp .= '[a-zA-Z]+';
                         }
                     }
-                }
-                else
-                {
-                    if($key + 1 == count(explode('/', $arguments[0])))
-                    {
+                } else {
+                    if ($key + 1 == count(explode('/', $arguments[0]))) {
                         $uriRegExp .= trim($path);
-                    }
-                    else
-                    {
+                    } else {
                         $uriRegExp .= trim($path) . '\/';
                     }
                 }
@@ -93,17 +80,14 @@ class Router
      */
     public function submit()
     {
-        if(in_array($_SERVER['REQUEST_METHOD'], explode(',', trim(Config::getEnvProperties('http_method')))))
-        {
+        if (in_array($_SERVER['REQUEST_METHOD'], explode(',', trim(Config::getEnvProperties('http_method'))))) {
             $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
             if(self::stringEndsWith($uri, '/') && $uri !== '/') $uri = substr($uri, 0, strlen($uri) - 1);
             $uriMatches = false;
             $index;
             print_r(self::$uriListRegExp[$_SERVER['REQUEST_METHOD']]);
-            foreach(self::$uriListRegExp[$_SERVER['REQUEST_METHOD']] as $key => $regex)
-            {
-                if(preg_match($regex, $uri))
-                {
+            foreach (self::$uriListRegExp[$_SERVER['REQUEST_METHOD']] as $key => $regex) {
+                if (preg_match($regex, $uri)) {
                     // echo $uri . '<br>'; 
                     // $regExp = $regex;
                     echo $regex . '<br>';
@@ -114,12 +98,9 @@ class Router
                 }
             }
             print_r(self::$uriCallback);
-            if($uriMatches)
-            {
+            if ($uriMatches) {
                 call_user_func(self::$uriCallback[$_SERVER['REQUEST_METHOD']][$uri]);
-            }
-            else
-            {
+            } else {
                 http_response_code(404);
                 render('../defaults/404.php', array('title' => '404 Not Found'));
                 print_r(self::$uriList);
@@ -128,9 +109,7 @@ class Router
                 echo '<br>';
                 print_r(self::$uriCallback);
             }
-        }
-        else
-        {
+        } else {
             http_response_code(405);
             render('../defaults/405.php', array('title' => '405 Method Not Allowed'));
         }
