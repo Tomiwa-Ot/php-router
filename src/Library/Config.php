@@ -12,7 +12,7 @@ class Config
 
 
     /**
-     *   Serializes the properties of .env in array format
+     *  Serializes the properties of .env in array format
      * 
      *  @return array
      */
@@ -29,7 +29,7 @@ class Config
 
 
     /**
-     *   Return .env property
+     *  Return .env property
      * 
      *  @param string $property
      * 
