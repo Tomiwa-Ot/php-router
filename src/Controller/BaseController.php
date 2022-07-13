@@ -4,7 +4,7 @@
  *  Base View Controller
  */
 
-require __DIR__ . '/../Library/Response.php';
+require_once __DIR__ . '/../Library/Response.php';
 
 class BaseController extends Response
 {
@@ -12,7 +12,7 @@ class BaseController extends Response
     /**
      *  On HTTP GET
      */
-    public function get()
+    public static function get()
     {
 
     }
@@ -20,7 +20,7 @@ class BaseController extends Response
     /**
      *  On HTTP POST
      */
-    public function post()
+    public static function post()
     {
 
     }
@@ -28,7 +28,7 @@ class BaseController extends Response
     /**
      *  On HTTP PUT
      */
-    public function put()
+    public static function put()
     {
 
     }
@@ -36,7 +36,7 @@ class BaseController extends Response
     /**
      *  On HTTP DELETE
      */
-    public function delete()
+    public static function delete()
     {
 
     }
