@@ -4,8 +4,8 @@
  *  Dynamic Routing Manager
  */
 
-require __DIR__ . '/../Library/Response.php';
-require __DIR__ . '/Config.php';
+require_once __DIR__ . '/../Library/Response.php';
+require_once __DIR__ . '/Config.php';
 
 class Router
 {
@@ -13,50 +13,45 @@ class Router
     /**
      *  Acceptable URI datatypes
      */
-    private $dataTypes = array('int', 'double', 'string');
+    private static $dataTypes = array('int', 'double', 'string');
 
     /**
      *  Valid URI(s)
      */
-    private static $uriList = array(
-        'GET' => array(),
-        'POST' => array(),
-        'PUT' => array(),
-        'DELETE' => array()
-    );
+    private static $uriList = array();
 
     /**
      *  Regex representation of URI(s)
      */
-    private static $uriListRegExp = array(
-        'GET' => array(),
-        'POST' => array(),
-        'PUT' => array(),
-        'DELETE' => array()
-    );
+    private static $uriListRegExp = array();
 
     /**
      *  Callbacks for URI(s)
      */
-    private static $uriCallback = array(
-        'GET' => array(),
-        'POST' => array(),
-        'PUT' => array(),
-        'DELETE' => array()
-    );
+    private static $uriCallback = array();
+
+    public function __construct()
+    {
+        $uriList = explode(',', trim(Config::getEnvProperties('http_method')));
+        foreach($uriList as $uri)
+        {
+            self::$uriList[strtoupper($uri)] = array();
+            self::$uriListRegExp[strtoupper($uri)] = array();
+            self::$uriCallback[strtoupper($uri)] = array();
+        }
+    }
 
     /**
      *  Register URI(s) and callbacks
      */
-    public static function __callStatic($name, $arguments)
+    public function __call($name, $arguments)
     {
         if(array_key_exists(strtoupper($name), self::$uriList))
         {
             $uriRegExp = '/';
-            foreach(explode('/', $arguments[0]) as $path)
+            foreach(explode('/', $arguments[0]) as $key => $path)
             {
-                $uriRegExp .= '\/';
-                if(str_starts_with(trim($path), '<') && str_ends_with(trim($path), '>'))
+                if(self::stringStartsWith(trim($path), '<') && self::stringEndsWith(trim($path), '>'))
                 {
                     if(!in_array(explode(':', substr(trim($path), 1, strlen(trim($path)) - 1))[0], self::$dataTypes, true))
                     {
@@ -64,7 +59,7 @@ class Router
                     }
                     else
                     {
-                        switch(gettype(trim($path)))
+                        switch(gettype(trim(explode(':', trim($path))[1])))
                         {
                             case 'integer':
                                 $uriRegExp .= '\d+';
@@ -72,27 +67,34 @@ class Router
                             case 'double':
                                 $uriRegExp .= '\d+\.\d+';
                             default:
-                                $uriRegExp .= '[a-Z]+';
+                                $uriRegExp .= '[a-zA-Z]+';
                         }
                     }
                 }
                 else
                 {
-                    $uriRegExp .= $path;
+                    if($key + 1 == count(explode('/', $arguments[0])))
+                    {
+                        $uriRegExp .= trim($path);
+                    }
+                    else
+                    {
+                        $uriRegExp .= trim($path) . '\/';
+                    }
                 }
             }
             self::$uriList[strtoupper($name)][] = $arguments[0];
-            self::$uriListRegExp[strtoupper($name)][] = $uriRegExp;
-            self::$uriCallback[strtoupper($name)][] = $arguments[1];
+            self::$uriListRegExp[strtoupper($name)][] = $uriRegExp .= '/';
+            self::$uriCallback[strtoupper($name)][$arguments[0]] = $arguments[1];
         }
     }
 
     /**
      *  Parse requested route
      */
-    public static function submit()
+    public function submit()
     {
-        if(in_array($_SERVER['REQUEST_METHOD'], Config::getEnvProperties('http_method')))
+        if(in_array($_SERVER['REQUEST_METHOD'], explode(',', trim(Config::getEnvProperties('http_method')))))
         {
             $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
             $uriMatches = false;
@@ -107,19 +109,45 @@ class Router
             if($uriMatches)
             {
                 call_user_func(self::$uriCallback[$_SERVER['REQUEST_METHOD']][$uri]);
+                print_r(self::$uriList);
+                echo '<br>';
+                print_r(self::$uriListRegExp);
+                echo '<br>';
+                print_r(self::$uriCallback);
             }
             else
             {
                 $res = new Response();
                 http_response_code(404);
-                $res->render('defaults/404.php', array('title' => '404 Not Found'));
+                $res->render('../defaults/404.php', array('title' => '404 Not Found'));
+                print_r(self::$uriList);
+                echo '<br>';
+                print_r(self::$uriListRegExp);
+                echo '<br>';
+                print_r(self::$uriCallback);
             }
         }
         else
         {
             $res = new Response();
             http_response_code(405);
-            $res->render('defaults/405.php', array('title' => '405 Method Not Allowed'));
+            $res->render('../defaults/405.php', array('title' => '405 Method Not Allowed'));
         }
     }
+
+    function stringStartsWith ($string, $startString)
+    {
+        $len = strlen($startString);
+        return (substr($string, 0, $len) === $startString);
+    }
+
+    function stringEndsWith($string, $endString)
+    {
+        $len = strlen($endString);
+        if ($len == 0) {
+            return true;
+        }
+        return (substr($string, -$len) === $endString);
+    }
+
 }
