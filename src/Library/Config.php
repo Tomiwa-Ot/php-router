@@ -16,7 +16,7 @@ class Config
      * 
      *  @return array
      */
-    private static function parseEnvProperties()
+    private static function parseEnvProperties(): array
     {
         $envProperties = array();
         $vars = file(Config::$baseDir . '/../.env', FILE_IGNORE_NEW_LINES);

@@ -14,7 +14,7 @@
  *  @param int|string|array|double $data
  *  @param int $statusCode
  */
-function json($data, $statusCode)
+function json($data, $statusCode): void
 {
     header('Content-Type: application/json; charset=utf-8');
     http_response_code($statusCode);
@@ -27,7 +27,7 @@ function json($data, $statusCode)
  *  @param int|string|array|double $data
  *  @param int $statusCode
  */
-function xml($data, $statusCode)
+function xml($data, $statusCode): void
 {
     $data = array($data);
     header('Content-Type: application/xml');
@@ -44,7 +44,7 @@ function xml($data, $statusCode)
  *  @param string $view
  *  @param array $data
  */
-function render($view, $data = array())
+function render($view, $data = array()): void
 {
     if(count($data)) extract($data);
     require __DIR__ . '/../View/layout/' . $view;
