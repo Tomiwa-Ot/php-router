@@ -4,7 +4,7 @@
  *  HTTP Response Class
  */
 
-final class Response
+class Response
 {
 
     /**
