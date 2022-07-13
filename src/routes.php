@@ -12,4 +12,5 @@ error_reporting(E_ALL);
 
 ini_set('display_errors', Config::getEnvProperties('display_error'));
 
+/** @var object $route Router class instance */
 $route = new Router();

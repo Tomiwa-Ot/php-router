@@ -9,6 +9,9 @@ class Log
 
     /**
      *  Write requests to log file
+     * 
+     *  @param int $dateTime
+     *  @param array $request
      */
     public static function writeToLog($dateTime, $request)
     {

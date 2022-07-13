@@ -7,14 +7,14 @@
 class Config
 {
 
-    /**
-     *  Project base directory
-     */
+    /** @var string $baseDir Project base directory */
     public static $baseDir = __DIR__;
 
 
     /**
      *   Serializes the properties of .env in array format
+     * 
+     *  @return array
      */
     private static function parseEnvProperties()
     {
@@ -31,6 +31,10 @@ class Config
 
     /**
      *   Return .env property
+     * 
+     *  @param string $property
+     * 
+     *  @return string|array
      */
     public static function getEnvProperties($property = '')
     {

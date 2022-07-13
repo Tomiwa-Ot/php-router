@@ -10,26 +10,21 @@ require_once __DIR__ . '/Config.php';
 class Router
 {
     
-    /**
-     *  Acceptable URI datatypes
-     */
+    /** @var array $dataTypes Acceptable URI datatypes */
     private static $dataTypes = array('int', 'double', 'string');
 
-    /**
-     *  Valid URI(s)
-     */
+    /** @var array $uriList Valid URI(s) */
     private static $uriList = array();
 
-    /**
-     *  Regex representation of URI(s)
-     */
+    /** @var array $uriListRegExp Regex representation of URI(s) */
     private static $uriListRegExp = array();
 
-    /**
-     *  Callbacks for URI(s)
-     */
+    /** @var array $uriCallback Callbacks for URI(s) */
     private static $uriCallback = array();
 
+    /**
+     *  Router constructor method
+     */
     public function __construct()
     {
         $uriList = explode(',', trim(Config::getEnvProperties('http_method')));
@@ -43,6 +38,9 @@ class Router
 
     /**
      *  Register URI(s) and callbacks
+     * 
+     *  @param $name
+     *  @param array $arguments
      */
     public function __call($name, $arguments)
     {
@@ -86,40 +84,44 @@ class Router
             self::$uriList[strtoupper($name)][] = $arguments[0];
             self::$uriListRegExp[strtoupper($name)][] = $uriRegExp .= '/';
             self::$uriCallback[strtoupper($name)][$arguments[0]] = $arguments[1];
+            //self::$uriCallback[strtoupper($name)][array_search($arguments[0], self::$uriList[strtoupper($name)])] = $arguments[1];
         }
     }
 
     /**
-     *  Parse requested route
+     *  Parse requested route and trigger registered callback
      */
     public function submit()
     {
         if(in_array($_SERVER['REQUEST_METHOD'], explode(',', trim(Config::getEnvProperties('http_method')))))
         {
             $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
+            if(self::stringEndsWith($uri, '/') && $uri !== '/') $uri = substr($uri, 0, strlen($uri) - 1);
             $uriMatches = false;
-            foreach(self::$uriListRegExp[$_SERVER['REQUEST_METHOD']] as $regex)
+            $index;
+            print_r(self::$uriListRegExp[$_SERVER['REQUEST_METHOD']]);
+            foreach(self::$uriListRegExp[$_SERVER['REQUEST_METHOD']] as $key => $regex)
             {
                 if(preg_match($regex, $uri))
                 {
+                    // echo $uri . '<br>'; 
+                    // $regExp = $regex;
+                    echo $regex . '<br>';
+                    $index = $key;
+                    echo $index;
                     $uriMatches = true;
                     break;
                 }
             }
+            print_r(self::$uriCallback);
             if($uriMatches)
             {
                 call_user_func(self::$uriCallback[$_SERVER['REQUEST_METHOD']][$uri]);
-                print_r(self::$uriList);
-                echo '<br>';
-                print_r(self::$uriListRegExp);
-                echo '<br>';
-                print_r(self::$uriCallback);
             }
             else
             {
-                $res = new Response();
                 http_response_code(404);
-                $res->render('../defaults/404.php', array('title' => '404 Not Found'));
+                render('../defaults/404.php', array('title' => '404 Not Found'));
                 print_r(self::$uriList);
                 echo '<br>';
                 print_r(self::$uriListRegExp);
@@ -129,18 +131,33 @@ class Router
         }
         else
         {
-            $res = new Response();
             http_response_code(405);
-            $res->render('../defaults/405.php', array('title' => '405 Method Not Allowed'));
+            render('../defaults/405.php', array('title' => '405 Method Not Allowed'));
         }
     }
 
+    /**
+     *  Check if string starts with a char(s)
+     * 
+     *  @param $string
+     *  @param $startString
+     * 
+     *  @return bool
+     */
     function stringStartsWith ($string, $startString)
     {
         $len = strlen($startString);
         return (substr($string, 0, $len) === $startString);
     }
 
+    /**
+     *  Check if string ends with a char(s)
+     * 
+     *  @param $string
+     *  @param $endString
+     * 
+     *  @return bool
+     */
     function stringEndsWith($string, $endString)
     {
         $len = strlen($endString);

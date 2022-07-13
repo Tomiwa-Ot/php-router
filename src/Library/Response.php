@@ -4,12 +4,15 @@
  *  HTTP Response Functions
  */
 
-
+/** @var array Variables in URI */
  $reqVar = array();
 
  
 /**
  *  Returns json output
+ * 
+ *  @param int|string|array|double $data
+ *  @param int $statusCode
  */
 function json($data, $statusCode)
 {
@@ -20,6 +23,9 @@ function json($data, $statusCode)
 
 /**
  *  Returns xml output
+ * 
+ *  @param int|string|array|double $data
+ *  @param int $statusCode
  */
 function xml($data, $statusCode)
 {
@@ -34,6 +40,9 @@ function xml($data, $statusCode)
 
 /**
  *  Render html view
+ * 
+ *  @param string $view
+ *  @param array $data
  */
 function render($view, $data = array())
 {
