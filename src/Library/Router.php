@@ -22,9 +22,7 @@ class Router
     /** @var array $uriCallback Callbacks for URI(s) */
     private $uriCallback = array();
 
-    /**
-     *  Router constructor method
-     */
+    /** Router constructor method */
     public function __construct()
     {
         $uriList = explode(',', trim(Config::getEnvProperties('http_method')));
@@ -46,60 +44,52 @@ class Router
         if (array_key_exists(strtoupper($name), $this->uriList)) {
             $uriRegExp = '/';
             foreach (explode('/', $arguments[0]) as $key => $path) {
-                if ($this->stringStartsWith(trim($path), '<') && $this->stringEndsWith(trim($path), '>')) {
-                    if (!in_array(explode(':', substr(trim($path), 1, strlen(trim($path)) - 1))[0], $this->dataTypes, true)) {
+                if ($this->stringStartsWith($path, '<') && $this->stringEndsWith($path, '>')) {
+                    if (!in_array(explode(':', substr($path, 1, strlen($path) - 1))[0], $this->dataTypes, true)) {
                         return;
                     } else {
-                        switch (gettype(trim(explode(':', trim($path))[1]))) {
-                            case 'integer':
+                        switch (substr(explode(':', $path)[0], 1, strlen(explode(':', $path)[0]))) {
+                            case 'int':
                                 $uriRegExp .= '\d+';
                                 break;
                             case 'double':
-                                $uriRegExp .= '\d+\.\d+';
+                                $uriRegExp .= '\d+|\d*\.\d+';
+                                break;
                             default:
-                                $uriRegExp .= '[a-zA-Z]+';
+                                $uriRegExp .= '\S+';
                         }
                     }
                 } else {
                     if ($key + 1 == count(explode('/', $arguments[0]))) {
-                        $uriRegExp .= trim($path);
+                        $uriRegExp .= $path;
                     } else {
-                        $uriRegExp .= trim($path) . '\/';
+                        $uriRegExp .= $path . '\/';
                     }
                 }
             }
             $this->uriList[strtoupper($name)][] = $arguments[0];
-            $this->uriListRegExp[strtoupper($name)][] = $uriRegExp .= '/';
-            $this->uriCallback[strtoupper($name)][$arguments[0]] = $arguments[1];
-            //$this->uriCallback[strtoupper($name)][array_search($arguments[0], $this->uriList[strtoupper($name)])] = $arguments[1];
+            $this->uriListRegExp[strtoupper($name)][] = $uriRegExp .= '$/';
+            $this->uriCallback[strtoupper($name)][$uriRegExp] = $arguments[1];
         }
     }
 
-    /**
-     *  Parse requested route and trigger registered callback
-     */
+    /** Parse requested route and trigger registered callback */
     public function submit(): void
     {
         if (in_array($_SERVER['REQUEST_METHOD'], explode(',', trim(Config::getEnvProperties('http_method'))))) {
             $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
             if($this->stringEndsWith($uri, '/') && $uri !== '/') $uri = substr($uri, 0, strlen($uri) - 1);
             $uriMatches = false;
-            $index;
-            print_r($this->uriListRegExp[$_SERVER['REQUEST_METHOD']]);
-            foreach ($this->uriListRegExp[$_SERVER['REQUEST_METHOD']] as $key => $regex) {
+            $regExp = '';
+            foreach ($this->uriListRegExp[$_SERVER['REQUEST_METHOD']] as $regex) {
                 if (preg_match($regex, $uri)) {
-                    // echo $uri . '<br>'; 
-                    // $regExp = $regex;
-                    echo $regex . '<br>';
-                    $index = $key;
-                    echo $index;
+                    $regExp .= $regex;
                     $uriMatches = true;
                     break;
                 }
             }
-            print_r($this->uriCallback);
             if ($uriMatches) {
-                call_user_func($this->uriCallback[$_SERVER['REQUEST_METHOD']][$uri]);
+                call_user_func($this->uriCallback[$_SERVER['REQUEST_METHOD']][$regExp]);
             } else {
                 http_response_code(404);
                 render('../defaults/404.php', array('title' => '404 Not Found'));
