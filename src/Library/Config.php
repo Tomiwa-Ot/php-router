@@ -19,7 +19,7 @@ class Config
     private static function parseEnvProperties()
     {
         $envProperties = array();
-        $vars = file(Config::$baseDir . '/.env', FILE_IGNORE_NEW_LINES);
+        $vars = file(Config::$baseDir . '/../.env', FILE_IGNORE_NEW_LINES);
         foreach($vars as $var)
         {
             if(substr($var, 0, 2) === '##') continue;
