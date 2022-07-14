@@ -5,8 +5,14 @@
  */
 
 /** @var array Variables in URI */
- $reqVar = array();
+ $reqVars = array();
 
+
+ function reqVar($key)
+ {
+    global $reqVars;
+    return $reqVars;
+ }
  
 /**
  *  Returns json output
