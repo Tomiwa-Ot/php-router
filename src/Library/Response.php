@@ -4,14 +4,18 @@
  *  HTTP Response Functions
  */
 
-/** @var array Variables in URI */
- $reqVars = array();
-
-
+/** 
+ *  Returns URI variables
+ * 
+ *  @param string $key
+ * 
+ *  @return string|int|double
+ */
  function reqVar($key)
  {
-    global $reqVars;
-    return $reqVars;
+    require_once __DIR__ . '/URIVariables.php';
+    $reqVars = URIVariables::$reqVars;
+    return $reqVars[$key];
  }
  
 /**
