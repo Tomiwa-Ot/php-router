@@ -1,11 +1,16 @@
 <?php
 
-/**
- *  Dynamic Routing Manager
+/** 
+ * @Class  : Router
+ * @Purpose: Dynamic Routing Manager
+ * @Author : Olorunfemi-Ojo Tomiwa
+ * @Web    : https://github.com/Tomiwa-Ot
+ * @URL    : https://github.com/grephq/php-router
+ * @Wiki   : https://github.com/grephq/php-router/wiki
  */
 
-require_once __DIR__ . '/../Library/Response.php';
 require_once __DIR__ . '/Config.php';
+
 
 class Router
 {
@@ -22,14 +27,18 @@ class Router
     /** @var array $uriCallback Callbacks for URI(s) */
     private $uriCallback = array();
 
+    /** @var array $uriVariables Variables found in the URI */
+    private $uriVariables = array();
+
     /** Router constructor method */
     public function __construct()
     {
-        $uriList = explode(',', trim(Config::getEnvProperties('http_method')));
+        $uriList = explode(',', str_replace(' ', '', Config::getEnvProperties('http_method')));
         foreach ($uriList as $uri) {
             $this->uriList[strtoupper($uri)] = array();
             $this->uriListRegExp[strtoupper($uri)] = array();
             $this->uriCallback[strtoupper($uri)] = array();
+            $this->uriVariables[strtoupper($uri)] = array();
         }
     }
 
@@ -44,11 +53,11 @@ class Router
         if (array_key_exists(strtoupper($name), $this->uriList)) {
             $uriRegExp = '/';
             foreach (explode('/', $arguments[0]) as $key => $path) {
-                if ($this->stringStartsWith($path, '<') && $this->stringEndsWith($path, '>')) {
-                    if (!in_array(explode(':', substr($path, 1, strlen($path) - 1))[0], $this->dataTypes, true)) {
+                if ($this->stringStartsWith(str_replace(' ', '', $path), '<') && $this->stringEndsWith(str_replace(' ', '', $path), '>')) {
+                    if (!in_array(explode(':', substr(str_replace(' ', '', $path), 1, strlen(str_replace(' ', '', $path)) - 1))[0], $this->dataTypes, true)) {
                         return;
                     } else {
-                        switch (substr(explode(':', $path)[0], 1, strlen(explode(':', $path)[0]))) {
+                        switch (substr(explode(':', str_replace(' ', '', $path))[0], 1, strlen(explode(':', str_replace(' ', '', $path))[0]))) {
                             case 'int':
                                 $uriRegExp .= '\d+';
                                 break;
@@ -58,17 +67,20 @@ class Router
                             default:
                                 $uriRegExp .= '\S+';
                         }
+                        if ($key + 1 != count(explode('/', $arguments[0]))) {
+                            $uriRegExp .= str_replace(' ', '', $path) . '\/';
+                        } 
                     }
                 } else {
                     if ($key + 1 == count(explode('/', $arguments[0]))) {
-                        $uriRegExp .= $path;
+                        $uriRegExp .= str_replace(' ', '', $path);
                     } else {
-                        $uriRegExp .= $path . '\/';
+                        $uriRegExp .= str_replace(' ', '', $path) . '\/';
                     }
                 }
             }
-            $this->uriList[strtoupper($name)][] = $arguments[0];
             $this->uriListRegExp[strtoupper($name)][] = $uriRegExp .= '$/';
+            $this->uriList[strtoupper($name)][$uriRegExp] = htmlspecialchars($arguments[0]);
             $this->uriCallback[strtoupper($name)][$uriRegExp] = $arguments[1];
         }
     }
@@ -76,32 +88,42 @@ class Router
     /** Parse requested route and trigger registered callback */
     public function submit(): void
     {
-        if (in_array($_SERVER['REQUEST_METHOD'], explode(',', trim(Config::getEnvProperties('http_method'))))) {
+        if (in_array($_SERVER['REQUEST_METHOD'], explode(',', str_replace(' ', '', Config::getEnvProperties('http_method'))))) {
             $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
             if($this->stringEndsWith($uri, '/') && $uri !== '/') $uri = substr($uri, 0, strlen($uri) - 1);
             $uriMatches = false;
             $regExp = '';
             foreach ($this->uriListRegExp[$_SERVER['REQUEST_METHOD']] as $regex) {
+                echo $regex;
                 if (preg_match($regex, $uri)) {
                     $regExp .= $regex;
                     $uriMatches = true;
+                    echo $regex;
+                    foreach (explode('/', $this->uriList[$_SERVER['REQUEST_METHOD']][$regex]) as $key => $var) {
+                        if ($this->stringStartsWith($var, '<') && $this->stringEndsWith($var, '>')) {
+                            $this->uriVariables[$_SERVER['REQUEST_METHOD']][$regex][explode(':', substr($var, 0, strlen($var) - 1))[1]] = explode('/', $uri)[$key];
+                            require_once __DIR__ . '/../Library/Response.php';
+                            $reqVars = $this->uriVariables[$_SERVER['REQUEST_METHOD']][$regExp];
+                            print_r($reqVars);
+                        }
+                    }
                     break;
                 }
             }
             if ($uriMatches) {
                 call_user_func($this->uriCallback[$_SERVER['REQUEST_METHOD']][$regExp]);
             } else {
+                require_once __DIR__ . '/../Library/Response.php';
                 http_response_code(404);
-                render('../defaults/404.php', array('title' => '404 Not Found'));
+                render('../defaults/404.php', array('title' => '404 Not Found', 'route' => $_SERVER['REQUEST_URI']));
                 print_r($this->uriList);
                 echo '<br>';
                 print_r($this->uriListRegExp);
-                echo '<br>';
-                print_r($this->uriCallback);
             }
         } else {
+            require_once __DIR__ . '/../Library/Response.php';
             http_response_code(405);
-            render('../defaults/405.php', array('title' => '405 Method Not Allowed'));
+            render('../defaults/405.php', array('title' => '405 Method Not Allowed', 'method' => $_SERVER['REQUEST_METHOD']));
         }
     }
 
