@@ -114,7 +114,6 @@ class Router
                 require_once __DIR__ . '/../Library/Response.php';
                 http_response_code(404);
                 render('../defaults/404.php', array('title' => '404 Not Found', 'route' => $_SERVER['REQUEST_URI']));
-                print_r($this->uriList);
             }
         } else {
             require_once __DIR__ . '/../Library/Response.php';
