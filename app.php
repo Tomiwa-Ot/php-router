@@ -18,7 +18,7 @@ $route->post('/src/user', function() {
     User::post();
 });
 
-$route->get('/src/user/<int:id>', function() {
+$route->get('/src/user/<int:id>/<int:name>/<string : aj>', function() {
     User::get();
 });
 

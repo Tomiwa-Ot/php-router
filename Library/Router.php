@@ -16,7 +16,7 @@ class Router
 {
     
     /** @var array $dataTypes Acceptable URI datatypes */
-    private $dataTypes = array('int', 'double', 'string');
+    private $dataTypes = array('int', 'string');
 
     /** @var array $uriList Valid URI(s) */
     private $uriList = array();
@@ -61,9 +61,6 @@ class Router
                             case 'int':
                                 $uriRegExp .= '\d+';
                                 break;
-                            case 'double':
-                                $uriRegExp .= '\d+|\d*\.\d+';
-                                break;
                             default:
                                 $uriRegExp .= '\S+';
                         }
@@ -99,7 +96,11 @@ class Router
                     $uriMatches = true;
                     foreach (explode('/', $this->uriList[$_SERVER['REQUEST_METHOD']][$regex]) as $key => $var) {                    
                         if (strpos($var, ':')) {
-                            $this->uriVariables[$_SERVER['REQUEST_METHOD']][$regex][str_replace(' ', '', explode(':', substr($var, 0, strlen($var) - 4))[1])] = explode('/', $uri)[$key];
+                            if (preg_match('/\d+$/', explode('/', $uri)[$key])) {
+                                $this->uriVariables[$_SERVER['REQUEST_METHOD']][$regex][str_replace(' ', '', explode(':', substr($var, 0, strlen($var) - 4))[1])] = (int) explode('/', $uri)[$key];
+                            } else {
+                                $this->uriVariables[$_SERVER['REQUEST_METHOD']][$regex][str_replace(' ', '', explode(':', substr($var, 0, strlen($var) - 4))[1])] = explode('/', $uri)[$key];
+                            }
                             require_once __DIR__ . '/URIVariables.php';
                             URIVariables::$reqVars = $this->uriVariables[$_SERVER['REQUEST_METHOD']][$regExp];
                         }
@@ -113,6 +114,7 @@ class Router
                 require_once __DIR__ . '/../Library/Response.php';
                 http_response_code(404);
                 render('../defaults/404.php', array('title' => '404 Not Found', 'route' => $_SERVER['REQUEST_URI']));
+                print_r($this->uriList);
             }
         } else {
             require_once __DIR__ . '/../Library/Response.php';

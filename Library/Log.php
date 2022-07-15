@@ -15,7 +15,7 @@ class Log
      */
     public static function writeToLog($dateTime, $request): void
     {
-        $data = '[' . $dateTime . ']' . $request;
+        $data = '[' . $dateTime . '] ' . implode($request);
         $fp = fopen(__DIR__ . '/../Logs/server.log', 'a');
         fwrite($fp, $data);
         fclose($fp);

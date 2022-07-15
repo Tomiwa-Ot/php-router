@@ -26,6 +26,8 @@
  */
 function json($data, $statusCode): void
 {
+    require_once __DIR__ . '/Log.php';
+    Log::writeToLog(time(), $_SERVER);
     header('Content-Type: application/json; charset=utf-8');
     http_response_code($statusCode);
     echo json_encode($data);
@@ -39,6 +41,8 @@ function json($data, $statusCode): void
  */
 function xml($data, $statusCode): void
 {
+    require_once __DIR__ . '/Log.php';
+    Log::writeToLog(time(), $_SERVER);
     $data = array($data);
     header('Content-Type: application/xml');
     http_response_code($statusCode);
@@ -56,6 +60,8 @@ function xml($data, $statusCode): void
  */
 function render($view, $data = array()): void
 {
+    require_once __DIR__ . '/Log.php';
+    Log::writeToLog(time(), $_SERVER);
     if(count($data)) extract($data);
     require __DIR__ . '/../View/layout/' . $view;
 }
