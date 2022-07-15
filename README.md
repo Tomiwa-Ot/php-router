@@ -4,7 +4,9 @@
 ## Features
 - Dynamic routes
 - Pass variables in the URI
-- Muliple HTTP methods
+- Mulitiple HTTP methods
+- Custom error handling
+- Enable/Disable error reporting
 
 ## Usage
 ### Routes
@@ -46,8 +48,13 @@ class User extends BaseController
 ```
 
 ## Installation
+Via Git
 ```console
-
+git clone https://github.com/grephq/php-router.git
+```
+Via Composer
+```console
+composer create-project grephq/php-router
 ```
 
 ## Docs
