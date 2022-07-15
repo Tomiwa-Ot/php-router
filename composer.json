@@ -1,0 +1,20 @@
+{
+    "name": "grephq/php-router",
+    "description": "Dynamic routing",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Olorunfemi-Ojo Tomiwa",
+            "email": "ot.server1@outlook.com",
+            "homepage": "https://github.com/Tomiwa-Ot",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "ot.server1@outlook.com",
+        "wiki": "https://github.com/grephq/php-router/wiki"
+    },
+    "minimum-stability": "stable",
+    "require": {}
+}
