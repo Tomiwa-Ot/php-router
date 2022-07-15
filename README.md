@@ -7,21 +7,22 @@
 - Mulitiple HTTP methods
 - Custom error handling
 - Enable/Disable error reporting
+- Request logging
 
 ## Usage
 ### Routes
 Routes are defined in ```app.php```
 ```php
 $route->get('/users', function() {
-    User::get();
+    Index::get();
 });
 
 $route->post('/user/<string:name>', function() {
-    User::post();
+    Index::post();
 });
 
 $route->delete('/user/<int:id>', function() {
-    User::delete();
+    Index::delete();
 });
 ```
 
