@@ -2,6 +2,10 @@
 
 
 ## Features
+- Dynamic routes
+- Pass variables in the URI
+- Muliple HTTP methods
+- Session based basic authentication
 
 ## Usage
 ### Routes
@@ -23,8 +27,6 @@ $route->delete('/user/<int:id>', function() {
 ### Defining Controllers
 Controllers are defined in ```Controllers/```
 ```php
-require_once __DIR__ . '/BaseController.php';
-
 class User extends BaseController
 {
     public static function get()
@@ -42,6 +44,11 @@ class User extends BaseController
         xml('Delete Request', 200);
     }
 }
+```
+
+## Installation
+```console
+
 ```
 
 ## Docs
