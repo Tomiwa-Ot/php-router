@@ -16,5 +16,6 @@
         "wiki": "https://github.com/grephq/php-router/wiki"
     },
     "minimum-stability": "stable",
-    "require": {}
+    "require": {},
+    "version": "1.0.0"
 }
