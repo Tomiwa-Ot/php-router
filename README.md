@@ -5,7 +5,6 @@
 - Dynamic routes
 - Pass variables in the URI
 - Muliple HTTP methods
-- Session based basic authentication
 
 ## Usage
 ### Routes
