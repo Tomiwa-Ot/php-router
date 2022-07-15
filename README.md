@@ -61,8 +61,10 @@ composer create-project grephq/php-router
 ## Docs
 https://github.com/grephq/php-router/wiki
 
-## License
+## Example
+https://github.com/grephq/php-router/wiki/Usage#example
 
+## License
 
 MIT License
 
