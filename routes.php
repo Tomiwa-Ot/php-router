@@ -2,9 +2,9 @@
 
 require_once __DIR__ . '/Library/Router.php';
 
-foreach(glob(__DIR__ . '/Controller/*.php') as $file)
+foreach (glob(__DIR__ . '/Controller/*.php') as $file)
 {
-    if($file === __DIR__ . '/Controller/BaseController.php') continue;
+    if ($file === __DIR__ . '/Controller/BaseController.php') continue;
     require_once $file;
 }
 
