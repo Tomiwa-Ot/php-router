@@ -21,7 +21,7 @@ class Config
         $envProperties = array();
         $vars = file(Config::$baseDir . '/../.env', FILE_IGNORE_NEW_LINES);
         foreach ($vars as $var) {
-            if(substr($var, 0, 2) === '##') continue;
+            if (substr($var, 0, 2) === '##') continue;
             $envProperties[explode('=', $var)[0]] = explode('=', $var)[1];
         }
         return $envProperties;
