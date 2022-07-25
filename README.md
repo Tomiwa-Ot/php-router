@@ -2,6 +2,7 @@
 [![Latest Stable Version](http://poser.pugx.org/grephq/php-router/v)](https://packagist.org/packages/grephq/php-router) [![Total Downloads](http://poser.pugx.org/grephq/php-router/downloads)](https://packagist.org/packages/grephq/php-router) [![Latest Unstable Version](http://poser.pugx.org/grephq/php-router/v/unstable)](https://packagist.org/packages/grephq/php-router) [![License](http://poser.pugx.org/grephq/php-router/license)](https://packagist.org/packages/grephq/php-router)
 
 ## Features
+- Static routes
 - Dynamic routes
 - Pass variables in the URI
 - Mulitiple HTTP methods
