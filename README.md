@@ -5,7 +5,7 @@
 - Static routes
 - Dynamic routes
 - Pass variables in the URI
-- Mulitiple HTTP methods
+- Multiple HTTP methods
 - Custom error handling
 - Enable/Disable error reporting
 - Request logging
