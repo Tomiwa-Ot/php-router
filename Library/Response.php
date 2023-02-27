@@ -1,5 +1,7 @@
 <?php
 
+namespace Grep\Library;
+
 /**
  *  HTTP Response Functions
  */

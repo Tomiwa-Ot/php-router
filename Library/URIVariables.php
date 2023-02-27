@@ -1,5 +1,7 @@
 <?php
 
+namespace Grep\Library;
+
 /**
  *  Variables in the URI
  */

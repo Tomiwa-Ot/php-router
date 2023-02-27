@@ -8,5 +8,12 @@
 </head>
 <body>
     <pre> this is the index page</pre>
+	<?php
+	$dn = "CN=Administrator,CN=Users,DC=zube,DC=com";
+	$password = "GwgwmhYUTWmdRT7fAccIM@=nRiXX9*fk";
+	$dc = ldap_connect("ldap://zube.com", 636);
+	$ldap = ldap_bind($dc, $dn, $password);
+	print_r($ldap);
+	?>
 </body>
 </html>

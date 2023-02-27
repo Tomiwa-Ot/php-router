@@ -1,5 +1,7 @@
 <?php
 
+namespace Grep\Library;
+
 /** 
  * @Class  : Router
  * @Purpose: Dynamic Routing Manager

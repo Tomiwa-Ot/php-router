@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/Library/Router.php';
 
+use Grep\Library\Router;
+
 foreach (glob(__DIR__ . '/Controller/*.php') as $file) {
     if ($file === __DIR__ . '/Controller/BaseController.php') continue;
     require_once $file;

@@ -1,5 +1,7 @@
 <?php
 
+namespace Grep\Library;
+
 /**
  *   Parse and return .env configuration properties
  */
