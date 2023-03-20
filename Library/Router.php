@@ -7,8 +7,8 @@ namespace Grep\Library;
  * @Purpose: Dynamic Routing Manager
  * @Author : Olorunfemi-Ojo Tomiwa
  * @Web    : https://github.com/Tomiwa-Ot
- * @URL    : https://github.com/grephq/php-router
- * @Wiki   : https://github.com/grephq/php-router/wiki
+ * @URL    : https://github.com/Tomiwa-Ot/php-router
+ * @Wiki   : https://github.com/Tomiwa-Ot/php-router/wiki
  */
 
 require_once __DIR__ . '/Config.php';
@@ -68,7 +68,7 @@ class Router
                         }
                         if ($key + 1 != count(explode('/', $arguments[0]))) {
                             $uriRegExp .= '\/';
-                        } 
+                        }
                     }
                 } else {
                     if ($key + 1 == count(explode('/', $arguments[0]))) {

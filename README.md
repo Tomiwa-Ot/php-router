@@ -52,7 +52,7 @@ class User extends BaseController
 ## Installation
 Via Git
 ```bash
-git clone https://github.com/grephq/php-router.git
+git clone https://github.com/Tomiwa-Ot/php-router.git
 ```
 Via Composer
 ```bash
@@ -60,10 +60,10 @@ composer create-project grephq/php-router
 ```
 
 ## Docs
-https://github.com/grephq/php-router/wiki
+https://github.com/Tomiwa-Ot/php-router/wiki
 
 ## Example
-https://github.com/grephq/php-router/wiki/Usage#example
+https://github.com/Tomiwa-Ot/php-router/wiki/Usage#example
 
 ## License
 

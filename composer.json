@@ -1,6 +1,6 @@
 {
     "name": "grephq/php-router",
-    "description": "Dynamic routing",
+    "description": "Dynamic routing framework in php",
     "type": "project",
     "license": "MIT",
     "authors": [
@@ -13,9 +13,9 @@
     ],
     "support": {
         "email": "ot.server1@outlook.com",
-        "wiki": "https://github.com/grephq/php-router/wiki"
+        "wiki": "https://github.com/Tomiwa-Ot/php-router/wiki"
     },
     "minimum-stability": "stable",
     "require": {},
-    "version": "1.0.0"
+    "version": "1.0.1"
 }
