@@ -60,7 +60,8 @@ composer create-project grephq/php-router
 ```
 
 ## Docs
-https://github.com/Tomiwa-Ot/php-router/wiki
+- https://tomiwa-ot.github.io/php-router/
+- https://github.com/Tomiwa-Ot/php-router/wiki
 
 ## Example
 https://github.com/Tomiwa-Ot/php-router/wiki/Usage#example
