@@ -11,8 +11,6 @@ namespace Grep\Library;
  * @Wiki   : https://github.com/Tomiwa-Ot/php-router/wiki
  */
 
-require_once __DIR__ . '/Config.php';
-
 
 class Router
 {

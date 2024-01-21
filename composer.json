@@ -1,4 +1,9 @@
 {
+    "autoload": {
+        "psr-4": {
+            "Grep\\": "."
+        }
+    },
     "name": "grephq/php-router",
     "description": "Dynamic routing framework in php",
     "type": "project",

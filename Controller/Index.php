@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__ . '/BaseController.php';
+namespace Grep\Controller;
+
+use function Grep\Library\render;
 
 class Index extends BaseController
 {

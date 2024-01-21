@@ -53,10 +53,14 @@ class User extends BaseController
 Via Git
 ```bash
 git clone https://github.com/Tomiwa-Ot/php-router.git
+cd php-router
+composer install
 ```
 Via Composer
 ```bash
 composer create-project grephq/php-router
+cd php-router
+composer install
 ```
 
 ## Docs
