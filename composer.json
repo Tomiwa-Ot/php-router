@@ -3,7 +3,7 @@
         "psr-4": {
             "Grep\\": "."
         },
-        "file": [
+        "files": [
             "Library/Response.php"
         ]
     },
